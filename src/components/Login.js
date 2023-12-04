@@ -1,9 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState , useRef} from 'react'
 import Header from './Header'
-
+import checkValiddata from '../utils/Validate';
 const Login = () => {
 
     const [isSignIn , setIsSignIn] = useState(true);
+    const [errMessage , setErrMessage] = useState(null);
+    const email = useRef(null);
+    const password = useRef(null);
+
+    const handleButtonClick = ()=>{
+        
+          console.log(email.current.value);
+          console.log(password.current.value);
+        const message=  checkValiddata(email.current.value , password.current.value);
+        setErrMessage (message);
+      
+    }
     const toggleSignIn =()=>{
         setIsSignIn(!isSignIn);
     }
@@ -17,19 +29,41 @@ const Login = () => {
           />
        </div>
 
-       <form className='w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80 '>
+       <form 
+           onSubmit={(e)=> e.preventDefault()}
+          className='w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80 '>
         <h1 className ="font-bold text-3xl py-4">{isSignIn ? "Sign In" : "Sign Up"}</h1>
       {
         !isSignIn && (
-            <input type ="text" placeholder='Full Name' className="p-2 my-4  w-full bg-gray-800"   />
+        <input 
+            type ="text" 
+            placeholder='Full Name' 
+            className="p-2 my-4  w-full bg-gray-800"   
+        />
         )
       }
-        <input type ="text" placeholder='Email Address' className="p-2 my-4  w-full bg-gray-800"   />
-        <input type ="text" placeholder ='Password' className ="p-2 my-4  w-full bg-gray-800"/>
-        <button className='p-4 my-6 bg-red-700 w-full rounded-lg'>{isSignIn ? "Sign In" : "Sign Up"}</button>
-        <p class="py-4 cursor-pointer" onClick={toggleSignIn}>
-        {isSignIn ? "New to Netflix ? Sign Up Now" : "Already registered ? Sign In Now"}  
-             </p>
+        <input ref={email} 
+           type ="text"
+           placeholder='Email Address' 
+           className="p-2 my-4  w-full bg-gray-800"
+        />
+         
+        <input ref={password}
+           type ="text" 
+           placeholder ='Password' 
+           className ="p-2 my-4  w-full bg-gray-800"
+        />
+           <p className='text-red-600'>{errMessage}</p>
+        <button 
+            className='p-4 my-6 bg-red-700 w-full rounded-lg'
+            onClick={handleButtonClick}
+            
+        >
+            {isSignIn ? "Sign In" : "Sign Up"}
+        </button>
+        <p className="py-4 cursor-pointer" onClick={toggleSignIn}>
+            {isSignIn ? "New to Netflix ? Sign Up Now" : "Already registered ? Sign In Now"}  
+        </p>
       
        </form>
     
